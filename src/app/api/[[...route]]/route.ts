@@ -1,4 +1,4 @@
-import { authRoute } from "@/server/auth";
+import { authRoute } from "@/server/auth/index";
 import { userRoute } from "@/server/user";
 import { Elysia } from "elysia";
 
