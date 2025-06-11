@@ -1,19 +1,16 @@
 {
-  "name": "next-elysia-prisma",
+  "name": "next-elysia-drizzle",
   "version": "1.0.0",
   "type": "module",
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
-    "start": "prisma migrate deploy && next start",
-    "lint": "next lint",
-    "prisma": "prisma migrate dev --name init && prisma generate",
-    "postinstall": "prisma generate"
+    "start": "next start",
+    "lint": "next lint"
   },
   "dependencies": {
     "@elysiajs/eden": "1.2.0",
-    "@prisma/client": "6.5.0",
     "@tanstack/react-query": "5.71.10",
     "elysia": "1.2.25",
     "jose": "6.0.10",
@@ -23,6 +20,7 @@
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.1.3",
+    "@types/node": "24.0.1",
     "@types/react": "19.1.0",
     "@types/react-dom": "19.1.1",
     "eslint": "9.17.0",
@@ -30,7 +28,6 @@
     "postcss": "8.5.3",
     "prettier": "3.5.3",
     "prettier-plugin-tailwindcss": "^0.6.11",
-    "prisma": "6.5.0",
     "tailwindcss": "^4.1.3",
     "typescript": "5.8.3"
   }
