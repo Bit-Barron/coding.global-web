@@ -1,54 +1,31 @@
+import { safeParse } from "@/utils/base";
+import { SERVER_URL_KEY } from "@/utils/constants";
 import { Type as t } from "@sinclair/typebox";
-import { TypeCompiler } from "elysia/type-system";
-import { safeParse } from "~/utils/base";
+import { TypeCompiler } from "@sinclair/typebox/compiler";
 
 const serverSchema = t.Object({
+  DATABASE_URL: t.String({ minLength: 1, error: "DATABASE_URL not set!" }),
+  SECRET: t.String({ minLength: 1, error: "SECRET not set!" }),
   NODE_ENV: t.Union(
-    [t.Literal("development"), t.Literal("production"), t.Literal("test")],
+    [t.Literal("development"), t.Literal("test"), t.Literal("production")],
     {
-      minLength: 3,
-      error: "NODE_ENV server environment variable is not set!",
-      default: "development",
+      error: "NODE_ENV not set!",
     },
   ),
-  DATABASE_URL: t.String({
-    minLength: 1,
-    error: "DATABASE_URL server environment variable is not set!",
-  }),
-  DISCORD_CLIENT_ID: t.String({
-    minLength: 1,
-    error: "DISCORD_CLIENT_ID server environment variable is not set!",
-  }),
-  DISCORD_CLIENT_SECRET: t.String({
-    minLength: 1,
-    error: "DISCORD_CLIENT_SECRET server environment variable is not set!",
-  }),
-  AUTH_SECRET: t.String({
-    minLength: 1,
-    error: "AUTH_SECRET server environment variable is not set!",
-  }),
-  AUTH_TRUST_HOST: t.Optional(
-    t.String({
-      minLength: 1,
-      error: "AUTH_TRUST_HOST server environment variable is not set!",
-    }),
-  ),
-  AUTH_URL: t.String({
-    minLength: 1,
-    error: "AUTH_URL server environment variable is not set!",
-  }),
+  AUTH_COOKIE: t.Literal("auth", { error: "AUTH_COOKIE not set!" }),
+  SERVER_URL_KEY: t.Literal(SERVER_URL_KEY, { error: "SERVER_URL not set!" }),
+  SEVEN_DAYS: t.Integer({ minimum: 1, error: "SEVEN_DAYS not set!" }),
 });
 
 const serverSchemaChecker = TypeCompiler.Compile(serverSchema);
 
 const serverEnvResult = safeParse(serverSchemaChecker, {
   DATABASE_URL: process.env.DATABASE_URL,
-  DISCORD_CLIENT_ID: process.env.DISCORD_CLIENT_ID,
-  DISCORD_CLIENT_SECRET: process.env.DISCORD_CLIENT_SECRET,
-  AUTH_SECRET: process.env.AUTH_SECRET,
-  AUTH_TRUST_HOST: process.env.AUTH_TRUST_HOST,
-  AUTH_URL: process.env.AUTH_URL,
+  SECRET: process.env.SECRET,
   NODE_ENV: process.env.NODE_ENV,
+  AUTH_COOKIE: "auth",
+  SERVER_URL_KEY,
+  SEVEN_DAYS: 60 * 60 * 24 * 7, // 7 days in seconds
 });
 
 if (!serverEnvResult.success) {

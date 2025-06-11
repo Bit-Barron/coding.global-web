@@ -1,22 +1,38 @@
-export default {
-  root: true,
-  parser: "@typescript-eslint/parser",
-  extends: [
-    "eslint:recommended",
-    "plugin:@typescript-eslint/eslint-recommended",
-    "plugin:@typescript-eslint/recommended",
-    "plugin:solid/recommended",
-    "plugin:tailwindcss/recommended",
-    "plugin:import/typescript",
-    "plugin:drizzle/recommended",
-    "plugin:@tanstack/eslint-plugin-query/recommended",
-  ],
-  plugins: ["@typescript-eslint", "solid", "tailwindcss", "import", "drizzle"],
-  rules: {
-    "tailwindcss/no-custom-classname": "off",
-    "tailwindcss/classnames-order": "off",
-    "drizzle/enforce-delete-with-where": "off",
-    "@typescript-eslint/no-unused-vars": "off",
-    "solid/reactivity": "off",
+import js from "@eslint/js";
+import nextPlugin from "@next/eslint-plugin-next";
+import tsParser from "@typescript-eslint/parser";
+import reactHooksPlugin from "eslint-plugin-react-hooks";
+import globals from "globals";
+
+export default [
+  js.configs.recommended,
+  {
+    files: ["**/*.{js,jsx,ts,tsx}"],
+    languageOptions: {
+      parser: tsParser,
+      globals: {
+        ...globals.browser,
+        ...globals.es2021,
+        ...globals.node,
+        React: "readonly",
+      },
+    },
+    plugins: {
+      "@next/next": nextPlugin,
+      "react-hooks": reactHooksPlugin,
+    },
+    rules: {
+      "react-hooks/exhaustive-deps": "off",
+      "no-unused-vars": [
+        "warn",
+        {
+          varsIgnorePattern: "^(NodeJS|other)$",
+          ignoreRestSiblings: true,
+          args: "none",
+          caughtErrors: "none",
+        },
+      ],
+      ...nextPlugin.configs.recommended.rules,
+    },
   },
-};
+];

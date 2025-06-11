@@ -1,43 +1,26 @@
-import { getRequestEvent } from "solid-js/web";
-import {
-  getCookie,
-  getRequestHeaders,
-  HTTPEvent,
-  parseCookies,
-} from "vinxi/http";
-import { Locale } from "~/lib/i18n";
-import { clientEnv } from "./env/client";
+import { cookies, headers } from "next/headers";
+import { serverEnv } from "./env/server";
 
-export const setCookies = () => ({
-  $headers: {
-    cookie: Object.entries(parseCookies())
-      .map(([key, value]) => `${key}=${value}`)
-      .join("; "),
-  },
-});
+/**
+ * get cookie from nextjs header for RPC calls in server components ONLY.
+ * @returns An object containing the cookie header for authentication.
+ */
+export const setCookies = async () => {
+  const cookieStore = await cookies();
+  const cookie = [serverEnv.AUTH_COOKIE]
+    .map((name) => {
+      const value = cookieStore.get(name)?.value;
+      return value ? `${name}=${value}` : "";
+    })
+    .filter(Boolean)
+    .join("; ");
 
-export function getPreferredLanguage(): Locale {
-  const language = getCookie(clientEnv.LANGUAGE_KEY) as Locale;
+  return { $headers: { cookie } };
+};
 
-  if (language) return language;
-
-  const event = getRequestEvent();
-
-  return acceptLanguageHeader(event?.nativeEvent) || clientEnv.LANGUAGES[0];
-}
-
-export function acceptLanguageHeader(httpEvent?: HTTPEvent): Locale | null {
-  if (!httpEvent) return null;
-
-  const headers = getRequestHeaders(httpEvent);
-  const acceptLanguage = headers["accept-language"] || "";
-
-  if (!acceptLanguage) return null;
-
-  const languages = acceptLanguage
-    .split(",")
-    .map((lang) => lang.split(";")[0].trim().toLowerCase().split("-")[0])
-    .filter((lang) => clientEnv.LANGUAGES.includes(lang as Locale)) as Locale[];
-
-  return languages?.[0] || null;
-}
+/**
+ * Retrieves the server URL from server components ONLY, connected with `middlerware.ts`
+ * @returns The server URL string or undefined if not present.
+ */
+export const serverUrl = async () =>
+  (await headers()).get(serverEnv.SERVER_URL_KEY);

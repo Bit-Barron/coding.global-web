@@ -1,41 +1,42 @@
-# Coding Global Web.
+## NEP Stack
 
-## Project Description
+### Next, Elysia, Prisma
 
-Coding Global Web is a web application built using SolidJS, Elysia, and Drizzle ORM. It provides a platform for users to interact, share information, and collaborate on various projects. The application includes features such as user authentication, real-time chat, and task management.
+#### perfect full-stack starter-kit, with fully built auth
 
-## Installation Instructions
+## Built With
 
-To set up the project locally, follow these steps:
+- [nextjs](https://nextjs.org/) frontend & backend
+- [elysia](https://elysiajs.com/) backend api wrapper
+- [prisma](https://www.prisma.io/) database orm
+- [tanstack-query](https://tanstack.com/query/latest) request & cache management
+- [typebox](https://github.com/sinclairzx81/typebox) runtime type-safe json schema
+- [jose](https://github.com/panva/jose) json web token
 
-1. Clone the repository: `git clone https://github.com/0-don/coding.global-web.git`
-2. Navigate to the project directory: `cd coding.global-web`
-3. Install the dependencies: `npm install`
-4. Set up the environment variables by creating a `.env` file based on the provided `.env.example` file.
-5. Start the development server: `npm run dev`
+First, insall packages
 
-## Usage Guidelines
+```bash
+npm install
+```
 
-Once the project is set up, you can use the following commands to interact with the application:
+Second, init prisma and create database
 
-- `npm run dev`: Start the development server
-- `npm run build`: Build the project for production
-- `npm run start`: Start the production server
-- `npm run prettier`: Format the code using Prettier
-- `npm run lint`: Lint the code using ESLint
+```bash
+npm run prisma
+```
 
-## Contribution Information
+Third, run development server
 
-We welcome contributions from the community! To contribute to the project, follow these steps:
+```bash
+npm run dev
+```
 
-1. Fork the repository
-2. Create a new branch: `git checkout -b my-feature-branch`
-3. Make your changes and commit them: `git commit -m 'Add new feature'`
-4. Push to the branch: `git push origin my-feature-branch`
-5. Create a pull request
+### Reset Database
 
-## Technologies Used
+First, remove `./prisma/migrations` folder
 
-- **SolidJS**: A declarative JavaScript library for building user interfaces
-- **Elysia**: A lightweight web framework for building fast and scalable applications
-- **Drizzle ORM**: A TypeScript ORM for SQL databases
+Second, init prisma and create database
+
+```bash
+npm run prisma
+```
